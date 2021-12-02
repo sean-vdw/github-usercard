@@ -8,7 +8,7 @@ import axios from "axios";
 
 axios.get('https://api.github.com/users/sean-vdw')
   .then(resp => {
-    console.log(resp);
+    console.log(resp.data.html_url);
   })
   .catch(err => {
     console.error(err);
@@ -69,9 +69,12 @@ const followersArray = [];
     bigknell
 */
 
-function makeCard(obj) {
+const cards = document.querySelector('.cards');
+
+function makeCard({ userImg, realName, gitName, loc, profileUrl, userFollowers, userFollowing, userBio }) {
+
   const card = document.createElement('div');
-  const userImg = document.createElement('img');
+  const image = document.createElement('img');
   const cardInfo = document.createElement('div');
   const name = document.createElement('h3');
   const userName = document.createElement('p');
@@ -83,20 +86,20 @@ function makeCard(obj) {
   const bio = document.createElement('p');
 
   card.classList.add('card');
-  userImg.src = resp.data.avatar_url;
+  image.src = userImg;
   cardInfo.classList.add('card-info');
   name.classList.add('name');
-  name.textContent = resp.data.name;
+  name.textContent = `${realName}`;
   userName.classList.add('username');
-  userName.textContent = resp.data.login;
-  location.textContent = resp.data.location;
+  userName.textContent = `${gitName}`;
+  location.textContent = `${loc}`;
   profile.textContent = profileAddress;
-  profileAddress.setAttribute('href', resp.data.html_url);
-  followers.textContent = resp.data.followers;
-  following.textContent = resp.data.following;
-  bio.textContent = resp.data.bio;
+  profileAddress.setAttribute('href', `${profileUrl}`);
+  followers.textContent = `${userFollowers}`;
+  following.textContent = `${userFollowing}`;
+  bio.textContent = `${userBio}`;
 
-  card.appendChild(userImg);
+  card.appendChild(image);
   card.appendChild(cardInfo);
   cardInfo.appendChild(name);
   cardInfo.appendChild(userName);
@@ -109,3 +112,32 @@ function makeCard(obj) {
 
   return card;
 }
+
+function getGhUser(url) {
+  axios.get(url)
+  .then(resp => {
+    const avatar = resp.data.avatar_url;
+    console.log(avatar);
+    const _name = resp.data.name;
+    const _userName = resp.data.login;
+    const _location = resp.data.location;
+    const _gitUrl = resp.data.html_url;
+    const _followers = resp.data.followers;
+    const _following = resp.data.following;
+    const _bio = resp.data.bio;
+    cards.appendChild(makeCard({
+      userImg: avatar, 
+      realName: _name, 
+      gitName: _userName, 
+      loc: _location, 
+      profileUrl: _gitUrl, 
+      userFollowers: _followers, 
+      userFollowing: _following, 
+      userBio: _bio
+    }));
+  })
+  .catch(err => {
+    console.error(err);
+  })
+}
+getGhUser(`https://api.github.com/users/sean-vdw`);

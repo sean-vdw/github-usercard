@@ -137,7 +137,6 @@ function getGhUser(url) {
     console.error(err);
   })
 }
-getGhUser(`https://api.github.com/users/sean-vdw`);
 
 followersArray.forEach(ghUser => {
   getGhUser(`https://api.github.com/users/${ghUser}`);

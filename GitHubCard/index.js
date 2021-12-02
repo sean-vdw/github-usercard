@@ -38,7 +38,13 @@ axios.get('https://api.github.com/users/sean-vdw')
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  'tetondan',
+  'dustinmyers',
+  'justsml',
+  'luishrd',
+  'bigknell'
+];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -116,24 +122,15 @@ function makeCard({ userImg, realName, gitName, loc, profileUrl, userFollowers, 
 function getGhUser(url) {
   axios.get(url)
   .then(resp => {
-    const avatar = resp.data.avatar_url;
-    console.log(avatar);
-    const _name = resp.data.name;
-    const _userName = resp.data.login;
-    const _location = resp.data.location;
-    const _gitUrl = resp.data.html_url;
-    const _followers = resp.data.followers;
-    const _following = resp.data.following;
-    const _bio = resp.data.bio;
     cards.appendChild(makeCard({
-      userImg: avatar, 
-      realName: _name, 
-      gitName: _userName, 
-      loc: _location, 
-      profileUrl: _gitUrl, 
-      userFollowers: _followers, 
-      userFollowing: _following, 
-      userBio: _bio
+      userImg: resp.data.avatar_url, 
+      realName: resp.data.name, 
+      gitName: resp.data.login, 
+      loc: resp.data.location, 
+      profileUrl: resp.data.html_url, 
+      userFollowers: resp.data.followers, 
+      userFollowing: resp.data.following, 
+      userBio: resp.data.bio
     }));
   })
   .catch(err => {
@@ -141,3 +138,7 @@ function getGhUser(url) {
   })
 }
 getGhUser(`https://api.github.com/users/sean-vdw`);
+
+followersArray.forEach(ghUser => {
+  getGhUser(`https://api.github.com/users/${ghUser}`);
+})

@@ -1,8 +1,18 @@
+import axios from "axios";
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+
+axios.get('https://api.github.com/users/sean-vdw')
+  .then(resp => {
+    console.log(resp);
+  })
+  .catch(err => {
+    console.error(err);
+  })
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -58,3 +68,44 @@ const followersArray = [];
     luishrd
     bigknell
 */
+
+function makeCard(obj) {
+  const card = document.createElement('div');
+  const userImg = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const userName = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const profileAddress = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  card.classList.add('card');
+  userImg.src = resp.data.avatar_url;
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  name.textContent = resp.data.name;
+  userName.classList.add('username');
+  userName.textContent = resp.data.login;
+  location.textContent = resp.data.location;
+  profile.textContent = profileAddress;
+  profileAddress.setAttribute('href', resp.data.html_url);
+  followers.textContent = resp.data.followers;
+  following.textContent = resp.data.following;
+  bio.textContent = resp.data.bio;
+
+  card.appendChild(userImg);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(userName);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(profileAddress);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  return card;
+}
